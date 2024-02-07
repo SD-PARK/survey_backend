@@ -1,0 +1,128 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Choice {
+  id: Int!
+  questionId: Int
+  content: String!
+  score: Int!
+}
+
+type Question {
+  id: Int!
+  surveyId: Int
+  content: String!
+}
+
+type Survey {
+  id: Int!
+  title: String!
+  description: String
+}
+
+type SurveyResponse {
+  id: Int!
+  surveyId: Int!
+  userId: Int!
+  completionDate: DateTime
+  score: Int!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Answer {
+  id: Int!
+  surveyResponseId: Int!
+  choiceId: Int!
+}
+
+type Query {
+  getSurvey(id: Float!): Survey!
+  getSurveys: [Survey!]!
+  getQuestion(id: Float!): Question!
+  getQuestions: [Question!]!
+  getChoice(id: Float!): Choice!
+  getChoices: [Choice!]!
+  getSurveyResponse(id: Float!): SurveyResponse!
+  getSurveyResponses: [SurveyResponse!]!
+  getCompletedSurveys: [SurveyResponse!]!
+  getAnswer(id: Float!): Answer!
+  getAnswers: [Answer!]!
+}
+
+type Mutation {
+  createSurvey(surveyInput: CreateSurveyInput!): Survey!
+  updateSurvey(id: Float!, surveyInput: UpdateSurveyInput!): Survey!
+  deleteSurvey(id: Float!): Float!
+  createQuestion(QuestionInput: CreateQuestionInput!): Question!
+  updateQuestion(id: Float!, QuestionInput: UpdateQuestionInput!): Question!
+  deleteQuestion(id: Float!): Float!
+  createChoice(ChoiceInput: CreateChoiceInput!): Choice!
+  updateChoice(id: Float!, ChoiceInput: UpdateChoiceInput!): Choice!
+  deleteChoice(id: Float!): Float!
+  createSurveyResponse(surveyResponseInput: CreateSurveyResponseInput!): SurveyResponse!
+  updateSurveyResponse(id: Float!, surveyResponseInput: UpdateSurveyResponseInput!): SurveyResponse!
+  completeSurvey(id: Float!): SurveyResponse!
+  deleteSurveyResponse(id: Float!): Float!
+  createAnswer(answerInput: CreateAnswerInput!): Answer!
+  updateAnswer(id: Float!, answerInput: UpdateAnswerInput!): Answer!
+  deleteAnswer(id: Float!): Float!
+}
+
+input CreateSurveyInput {
+  title: String!
+  description: String
+}
+
+input UpdateSurveyInput {
+  title: String
+  description: String
+}
+
+input CreateQuestionInput {
+  surveyId: Int
+  content: String!
+}
+
+input UpdateQuestionInput {
+  surveyId: Int
+  content: String
+}
+
+input CreateChoiceInput {
+  questionId: Int
+  content: String!
+  score: Int!
+}
+
+input UpdateChoiceInput {
+  questionId: Int
+  content: String
+  score: Int
+}
+
+input CreateSurveyResponseInput {
+  surveyId: Int!
+  userId: Int!
+  completionDate: DateTime
+}
+
+input UpdateSurveyResponseInput {
+  surveyId: Int
+  userId: Int
+  completionDate: DateTime
+}
+
+input CreateAnswerInput {
+  surveyResponseId: Int!
+  choiceId: Int!
+}
+
+input UpdateAnswerInput {
+  surveyResponseId: Int
+  choiceId: Int
+}
