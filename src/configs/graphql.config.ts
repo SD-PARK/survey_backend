@@ -10,17 +10,17 @@ export const graphQLConfig: ApolloDriverConfig = {
     autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
     formatError: (err, data) => {
         let { message, extensions } = err;
-        logger.error(err.message);
+        logger.error(message);
       
         // class-validator 및 graphQL의 유효성 검사 핸들링
         if (err instanceof ValidationError || (extensions && extensions.code === "GRAPHQL_VALIDATION_FAILED")) {
           extensions = { status: 400 };
+        } else if (err.extensions.status || err.extensions.originalError) {
+          const originalError = err.extensions.originalError as { statusCode: number };
+          extensions = { status: originalError.statusCode || err.extensions.status };
         } else if (err.message.includes('참조키(foreign key) 제약 조건을 위배했습니다')) {
-          message = '참조키(foreign key)를 가진 속성에 유효하지 않은 값이 입력되었습니다.';
+          message = 'ID 값이 유효하지 않습니다.';
           extensions = { status: 400 };
-        } else if (err.message.includes('해당하는 항목을 찾을 수 없습니다.')) {
-          message = err.message.substring(18);
-          extensions = { status: 404 };
         }
 
         const errorResponse = {
