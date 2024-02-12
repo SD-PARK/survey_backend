@@ -10,6 +10,8 @@ import { QuestionModule } from './modules/question/question.module';
 import { ChoiceModule } from './modules/choice/choice.module';
 import { SurveyResponseModule } from './modules/survey_response/survey_response.module';
 import { AnswerModule } from './modules/answer/answer.module';
+import { UserModule } from './modules/user/user.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -19,7 +21,7 @@ import { AnswerModule } from './modules/answer/answer.module';
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>(graphQLConfig),
     TypeOrmModule.forRootAsync(typeOrmConfig),
-    SurveyModule, QuestionModule, ChoiceModule, SurveyResponseModule, AnswerModule,
+    SurveyModule, QuestionModule, ChoiceModule, SurveyResponseModule, AnswerModule, AuthModule, UserModule,
   ],
   controllers: [],
   providers: [],

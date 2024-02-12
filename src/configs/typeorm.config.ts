@@ -1,6 +1,7 @@
 import { ConfigService } from "@nestjs/config";
 import { TypeOrmModuleAsyncOptions } from "@nestjs/typeorm";
 import { Answer } from "src/modules/answer/answer.entity";
+import { User } from "src/modules/user/user.entity";
 import { Choice } from "src/modules/choice/choice.entity";
 import { Question } from "src/modules/question/question.entity";
 import { Survey } from "src/modules/survey/survey.entity";
@@ -19,7 +20,7 @@ export const typeOrmConfig: TypeOrmModuleAsyncOptions = {
         //     'rejectUnauthorized': false
         //   }
         // },
-        entities: [Survey, Question, Choice, SurveyResponse, Answer],
+        entities: [Survey, Question, Choice, SurveyResponse, Answer, User],
     }),
     inject: [ConfigService],
 }

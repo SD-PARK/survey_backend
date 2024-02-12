@@ -40,6 +40,20 @@ type Answer {
   choiceId: Int!
 }
 
+type User {
+  id: Int!
+  email: String!
+  password: String
+  name: String
+  gender: Boolean
+  age: Int
+}
+
+type LoginResponse {
+  access_token: String!
+  user: User!
+}
+
 type Query {
   getSurvey(id: Float!): Survey!
   getSurveys: [Survey!]!
@@ -52,6 +66,9 @@ type Query {
   getCompletedSurveys: [SurveyResponse!]!
   getAnswer(id: Float!): Answer!
   getAnswers: [Answer!]!
+  getUserId(id: Float!): User!
+  getUserEmail(email: String!): User!
+  getUsers: [User!]!
 }
 
 type Mutation {
@@ -71,6 +88,8 @@ type Mutation {
   createAnswer(answerInput: CreateAnswerInput!): Answer!
   updateAnswer(id: Float!, answerInput: UpdateAnswerInput!): Answer!
   deleteAnswer(id: Float!): Float!
+  signup(CreateUserInput: CreateUserInput!): User!
+  login(loginInput: LoginInput!): LoginResponse!
 }
 
 input CreateSurveyInput {
@@ -125,4 +144,17 @@ input CreateAnswerInput {
 input UpdateAnswerInput {
   surveyResponseId: Int
   choiceId: Int
+}
+
+input CreateUserInput {
+  email: String!
+  password: String!
+  name: String
+  gender: Boolean
+  age: Int
+}
+
+input LoginInput {
+  email: String!
+  password: String!
 }
