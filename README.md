@@ -70,6 +70,7 @@ $ npm run test:cov
 4. [댓글 API](#댓글-API)
 
 ---
+
 ### 유저 API
 **`GET /v1/users`**
 
@@ -77,9 +78,9 @@ $ npm run test:cov
 
 **Response**
 
-200: 조회된 유저 정보
+Code **200**: 조회된 유저 정보
 
-401: 권한 없음
+Code **401**: 권한 없음
 
 <br>
 
@@ -109,9 +110,9 @@ $ npm run test:cov
 }
 ```
 
-401: 권한 없음
+Code **401**: 권한 없음
 
-409: 이미 존재하는 계정
+Code **409**: 이미 존재하는 계정
 
 <br>
 
@@ -140,9 +141,9 @@ $ npm run test:cov
 }
 ```
 
-401: 권한 없음
+Code **401**: 권한 없음
 
-404: 유저 ID가 유효하지 않음
+Code **404**: 유저 ID가 유효하지 않음
 
 <br>
 
@@ -160,10 +161,57 @@ $ npm run test:cov
 
 **Response**
 
-200: 삭제 완료
+Code **200**: 삭제 완료
 
-401: 권한 없음
+Code **401**: 권한 없음
 
-404: 유저 ID가 유효하지 않음
+Code **404**: 유저 ID가 유효하지 않음
+
+---
+
+### 로그인 API
+
+**`POST /v1/auths/login`**
+
+로그인 후 Access Token과 Refesh Token을 발급합니다.
+
+**Body Example**
+```
+{
+  "email": "test@test.com",
+  "password": "test123!"
+}
+```
+
+**Response**
+
+**Code 201**: 토큰 반환
+```
+{
+  "access_token": "string",
+  "refresh_token": "string"
+}
+```
+
+Code **401**: 권한 없음
+
+Code **403**: 이메일 또는 비밀번호가 유효하지 않음
+
+<br>
+
+**`POST /v1/auths/refresh`**
+
+Access Token을 재발급합니다.
+
+**Response**
+
+Code **201**: Access Token 반환
+```
+{
+  "access_token": "string"
+}
+```
+
+Code **401**: Refresh Token이 유효하지 않음
 
 ---
