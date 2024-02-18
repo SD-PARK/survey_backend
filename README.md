@@ -72,6 +72,7 @@ $ npm run test:cov
 ---
 
 ### 유저 API
+
 **`GET /v1/users`**
 
 유저를 조회합니다.
@@ -99,7 +100,7 @@ Code **401**: 권한 없음
 
 **Response**
 
-201: 생성된 유저 정보
+Code **201**: 생성된 유저 정보
 ```
 {
   "userId": 1,
@@ -130,7 +131,7 @@ Code **409**: 이미 존재하는 계정
 
 **Response**
 
-200: 수정된 유저 정보
+Code **200**: 수정된 유저 정보
 ```
 {
   "userId": 1,
@@ -150,14 +151,6 @@ Code **404**: 유저 ID가 유효하지 않음
 **`DELETE /v1/users/`**
 
 유저를 삭제합니다.
-
-**Body Example**
-```
-{
-  "password": "test123!",
-  "name": "닉네임"
-}
-```
 
 **Response**
 
@@ -185,7 +178,7 @@ Code **404**: 유저 ID가 유효하지 않음
 
 **Response**
 
-**Code 201**: 토큰 반환
+Code **201**: 토큰 반환
 ```
 {
   "access_token": "string",
@@ -213,5 +206,155 @@ Code **201**: Access Token 반환
 ```
 
 Code **401**: Refresh Token이 유효하지 않음
+
+---
+
+### 게시글 API
+
+**`GET /v1/boards`**
+
+게시글 목록을 조회합니다.
+
+**Query Example**
+```
+target?: "all" || "title" || "writer",
+keyword?: "키워드",
+category?: "공지사항",
+sort?: "view" || "view7d" || "view30d" || "view365d",
+page?: 1
+```
+
+**Response**
+
+Code **200**: 조회된 게시글 목록
+```
+[
+  {
+    "id": 1,
+    "category": "공지사항",
+    "writer": "작성자",
+    "title": "제목",
+    "regdate": "2024-01-01 00:00:00",
+    "views": 0
+  }
+]
+```
+
+Code **401**: 권한 없음
+
+<br>
+
+**`GET /v1/boards/${id}`**
+
+특정 게시글을 조회합니다.
+
+**Response**
+
+Code **200**: 조회된 게시글
+```
+{
+  "boardId": 1,
+  "categoryId": 1,
+  "userId": 1,
+  "title": "제목",
+  "content": "내용",
+  "regdate": "2024-01-01 00:00:00",
+  "updatedate": "2024-01-01 00:00:00",
+  "deletedate": "2024-01-01 00:00:00",
+  "views": 0
+}
+```
+
+Code **401**: 권한 없음
+
+Code **404**: 게시글이 존재하지 않음
+
+<br>
+
+**`POST /v1/boards`**
+
+새 게시글을 작성합니다.
+
+**Body Example**
+```
+{
+  "categoryId": 1,
+  "title": "title",
+  "content": "content"
+}
+```
+
+**Response**
+
+Code **201**: 작성된 게시글
+```
+{
+  "boardId": 1,
+  "categoryId": 1,
+  "userId": 1,
+  "title": "제목",
+  "content": "내용",
+  "regdate": "2024-01-01 00:00:00",
+  "updatedate": "2024-01-01 00:00:00",
+  "deletedate": "2024-01-01 00:00:00",
+  "views": 0
+}
+```
+
+Code **400**: 카테고리 ID가 유효하지 않음
+
+Code **401**: 권한 없음
+
+<br>
+
+**`PATCH /v1/boards/${id}`**
+
+게시글을 수정합니다.
+
+**Body Example**
+```
+{
+  "categoryId": 1,
+  "title": "title",
+  "content": "content"
+}
+```
+
+**Response**
+
+Code **200**: 수정된 게시글
+```
+{
+  "boardId": 1,
+  "categoryId": 1,
+  "userId": 1,
+  "title": "제목",
+  "content": "내용",
+  "regdate": "2024-01-01 00:00:00",
+  "updatedate": "2024-01-01 00:00:00",
+  "deletedate": "2024-01-01 00:00:00",
+  "views": 0
+}
+```
+
+Code **400**: 카테고리 ID가 유효하지 않음
+
+Code **401**: 권한 없음
+
+Code **404**: 게시글 ID가 유효하지 않음
+
+<br>
+
+**`DELETE /v1/boards/${id}`**
+
+게시글을 삭제합니다.
+
+**Response**
+
+Code **200**: 삭제 완료
+
+Code **401**: 권한 없음
+
+Code **404**: 게시글 ID가 유효하지 않음
 
 ---
