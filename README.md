@@ -124,8 +124,8 @@ Code **409**: 이미 존재하는 계정
 **Body Example**
 ```
 {
-  "password": "test123!",
-  "name": "닉네임"
+  "password"?: "test123!",
+  "name"?: "닉네임"
 }
 ```
 
@@ -250,7 +250,7 @@ Code **401**: 권한 없음
 
 **Response**
 
-Code **200**: 조회된 게시글
+Code **200**: 조회된 게시글 정보
 ```
 {
   "boardId": 1,
@@ -286,7 +286,7 @@ Code **404**: 게시글이 존재하지 않음
 
 **Response**
 
-Code **201**: 작성된 게시글
+Code **201**: 작성된 게시글 정보
 ```
 {
   "boardId": 1,
@@ -307,6 +307,27 @@ Code **401**: 권한 없음
 
 <br>
 
+**`POST /v1/boards/image`**
+
+이미지를 업로드합니다.
+
+**Body Example**
+```
+- multipart/form-data -
+file * string($binary)
+```
+
+**Response**
+
+Code **200**: 업로드된 이미지 URL
+```
+{
+  "imageUrl": "https://s3.apnortheast-2.amazonaws.com/src/image.png"
+}
+```
+
+<br>
+
 **`PATCH /v1/boards/${id}`**
 
 게시글을 수정합니다.
@@ -314,15 +335,15 @@ Code **401**: 권한 없음
 **Body Example**
 ```
 {
-  "categoryId": 1,
-  "title": "title",
-  "content": "content"
+  "categoryId"?: 1,
+  "title"?: "title",
+  "content"?: "content"
 }
 ```
 
 **Response**
 
-Code **200**: 수정된 게시글
+Code **200**: 수정된 게시글 정보
 ```
 {
   "boardId": 1,
@@ -356,5 +377,119 @@ Code **200**: 삭제 완료
 Code **401**: 권한 없음
 
 Code **404**: 게시글 ID가 유효하지 않음
+
+---
+
+### 댓글 API
+
+**`GET /v1/replys/${id}`**
+
+게시글의 댓글을 조회합니다.
+
+**Response**
+
+Code **200**: 조회된 댓글 정보
+```
+[
+  {
+    "id": 1,
+    "boardId": 1,
+    "name": "작성자",
+    "parentId": 1,
+    "content": "내용",
+    "regdate": "2024-01-01 00:00:00",
+    "updatedate": "2024-01-01 00:00:00",
+    "deletedate": "2024-01-01 00:00:00"
+  }
+]
+```
+
+Code **401**: 권한 없음
+
+<br>
+
+**`POST /v1/replys`**
+
+댓글을 작성합니다.
+
+**Body Example**
+```
+{
+  "boardId": 1,
+  "parentId": 1,
+  "content": "내용"
+}
+```
+
+**Response**
+
+Code **201**: 작성된 댓글 정보
+```
+{
+  "replyId": 1,
+  "boardId": 1,
+  "userId": 1,
+  "parentId": 1,
+  "content": "내용",
+  "regdate": "2024-01-01 00:00:00",
+  "updatedate": "2024-01-01 00:00:00",
+  "deletedate": "2024-01-01 00:00:00"
+}
+```
+
+Code **400**: 게시글 ID 또는 부모 댓글 ID가 유효하지 않음
+
+Code **401**: 권한 없음
+
+<br>
+
+**`PATCH /v1/replys/${id}`**
+
+댓글을 수정합니다.
+
+**Body Example**
+```
+{
+  "boardId"?: 1,
+  "parentId"?: 1,
+  "content"?: "내용"
+}
+```
+
+**Response**
+
+Code **200**: 수정된 댓글 정보
+```
+{
+  "replyId": 1,
+  "boardId": 1,
+  "userId": 1,
+  "parentId": 1,
+  "content": "내용",
+  "regdate": "2024-01-01 00:00:00",
+  "updatedate": "2024-01-01 00:00:00",
+  "deletedate": "2024-01-01 00:00:00"
+}
+```
+
+Code **400**: 게시글 ID 또는 부모 댓글 ID가 유효하지 않음
+
+Code **401**: 권한 없음
+
+Code **404**: 댓글 ID가 유효하지 않음
+
+<br>
+
+**`DELETE /v1/replys/${id}`**
+
+댓글을 삭제합니다.
+
+**Response**
+
+Code **200**: 삭제 완료
+
+Code **401**: 권한 없음
+
+Code **404**: 댓글 ID가 유효하지 않음
 
 ---
