@@ -5,10 +5,8 @@
 <p align="center">
   <img src ="https://img.shields.io/badge/TYPESCRIPT-3178C6.svg?&style=for-the-badge&logo=TypeScript&logoColor=white"/>
   <img src ="https://img.shields.io/badge/NESTJS-E0234E.svg?&style=for-the-badge&logo=NestJS&logoColor=white"/>
-  <img src ="https://img.shields.io/badge/MYSQL-4479A1.svg?&style=for-the-badge&logo=MySQL&logoColor=white"/>
-  <img src ="https://img.shields.io/badge/MYSQL-4479A1.svg?&style=for-the-badge&logo=MySQL&logoColor=white"/>
-  <img src ="https://img.shields.io/badge/MYSQL-4479A1.svg?&style=for-the-badge&logo=MySQL&logoColor=white"/>
-  <img src ="https://img.shields.io/badge/MYSQL-4479A1.svg?&style=for-the-badge&logo=MySQL&logoColor=white"/>
+  <img src ="https://img.shields.io/badge/GRAPHQL-E10098.svg?&style=for-the-badge&logo=GraphQL&logoColor=white"/>
+  <img src ="https://img.shields.io/badge/POSTGRESQL-4169E1.svg?&style=for-the-badge&logo=PostgreSQL&logoColor=white"/>
 </p>
 
 ## Installation
@@ -64,33 +62,145 @@ $ npm run test:cov
 
 ## API
 
-1. [유저 API](#유저-API)
-2. [로그인 API](#로그인-API)
-3. [게시글 API](#게시글-API)
-4. [댓글 API](#댓글-API)
+***"작성지 CRUD를 통해 설문지 완료, 완료된 설문지 확인, 설문지 총점 확인 등의 기능을 확인할 수 있습니다."***
+
+1. [설문지 CRUD](#설문지-CRUD)
+2. [문항 CRUD](#문항-CRUD)
+3. [선택지 CRUD](#선택지-CRUD)
+4. [답변 CRUD](#답변-CRUD)
+5. [작성지 CRUD](#작성지-CRUD)
 
 ---
+### 설문지 CRUD
+**CREATE**
 
+`새 설문지를 생성합니다.`
+```graphql
+mutation {
+  createSurvey(surveyInput: {
+    title: "호그와트 기숙사 테스트"
+    description: "본 온라인 호그와트 기숙사 배정 모자 테스트는 그리핀도르, 래번클로, 후플푸프, 슬리데린의 네 가지 호그와트 기숙사에 해당되는 점수를 매깁니다."
+  }) {
+    id
+    title
+    description
+  }
+}
+```
 ### 유저 API
-
 **`GET /v1/users`**
 
+**READ**
 유저를 조회합니다.
 
+`ID에 해당하는 설문지를 조회합니다.`
+```graphql
+query {
+  getSurvey(id: 1) {
+    id
+    title
+    description
+  }
+}
+```
 **Response**
 
-Code **200**: 조회된 유저 정보
+`모든 설문지를 조회합니다.`
+```graphql
+query {
+  getSurveys {
+    id
+    title
+    description
+  }
+}
+```
+200: 조회된 유저 정보
 
-Code **401**: 권한 없음
+**UPDATE**
 
+`설문지 데이터를 변경합니다.`
+```graphql
+mutation {
+  updateSurvey(id: 1, surveyInput: {
+    title: "호그와트 기숙사 배정 테스트"
+    description: "테스트를 통해 그리핀도르, 래번클로, 후플푸프, 슬리데린의 네 가지 호그와트 기숙사 중 어울리는 기숙사를 찾습니다."
+}) {
+    id
+    title
+    description
+  }
+}
+```
+
+**DELETE**
+401: 권한 없음
+
+`설문지를 삭제합니다.`
+```graphql
+mutation {
+  deleteSurvey(id: 1)
+}
+```
+---
+### 문항 CRUD
+**CREATE**
+
+`새 문항을 생성합니다.`
+```graphql
+mutation {
+  createQuestion(questionInput: {
+    surveyId: 1
+    content: "왼쪽인가? 오른쪽인가?"
+  }) {
+    id
+    surveyId
+    content
+  }
+}
+```
 <br>
 
+**READ**
 **`POST /v1/users`**
 
+`ID에 해당하는 문항을 조회합니다.`
+```graphql
+query {
+  getQuestion(id: 1) {
+    id
+    surveyId
+    content
+  }
+}
+```
 유저를 생성합니다.
 
+`모든 문항을 조회합니다.`
+```graphql
+query {
+  getQuestions {
+    id
+    surveyId
+    content
+  }
+}
 **Body Example**
 ```
+
+**UPDATE**
+
+`문항 데이터를 변경합니다.`
+```graphql
+mutation {
+  updateQuestion(id: 1, questionInput: {
+    surveyId: 2
+    content: "머리인가? 꼬리인가?"
+}) {
+    id
+    surveyId
+    content
+  }
 {
   "email": "test@test.com",
   "password": "test123!",
@@ -98,10 +208,33 @@ Code **401**: 권한 없음
 }
 ```
 
+**DELETE**
 **Response**
 
-Code **201**: 생성된 유저 정보
+`문항을 삭제합니다.`
+```graphql
+mutation {
+  deleteQuestion(id: 1)
+}
+201: 생성된 유저 정보
 ```
+---
+### 선택지 CRUD
+**CREATE**
+
+`새 선택지를 생성합니다.`
+```graphql
+mutation {
+  createChoice(choiceInput: {
+    questionId: 1
+    content: "왼쪽"
+    score: 1
+  }) {
+    id
+    questionId
+    content
+    score
+  }
 {
   "userId": 1,
   "email": "test@test.com",
@@ -111,28 +244,109 @@ Code **201**: 생성된 유저 정보
 }
 ```
 
-Code **401**: 권한 없음
+**READ**
 
-Code **409**: 이미 존재하는 계정
+`ID에 해당하는 선택지를 조회합니다.`
+```graphql
+query {
+  getChoice(id: 1) {
+    id
+    questionId
+    content
+    score
+  }
+}
+```
+401: 권한 없음
 
+`모든 선택지를 조회합니다.`
+```graphql
+query {
+  getChoices {
+    id
+    questionId
+    content
+    score
+  }
+}
+```
+409: 이미 존재하는 계정
+
+**UPDATE**
+
+`선택지 데이터를 변경합니다.`
+```graphql
+mutation {
+  updateChoice(id: 1, choiceInput: {
+    questionId: 2
+    content: "머리"
+    score: 2
+}) {
+    id
+    questionId
+    content
+    score
+  }
+}
+```
 <br>
 
+**DELETE**
 **`PATCH /v1/users`**
 
+`선택지를 삭제합니다.`
+```graphql
+mutation {
+  deleteChoice(id: 1)
+}
 유저 정보를 변경합니다.
 
 **Body Example**
 ```
+---
+### 답변 CRUD
+**CREATE**
+
+`새 답변을 생성합니다.`
+```graphql
+mutation {
+  createAnswer(answerInput: {
+    surveyResponseId: 1
+    choiceId: 1
+  }) {
+    id
+    surveyResponseId
+    choiceId
+  }
 {
-  "password"?: "test123!",
-  "name"?: "닉네임"
+  "password": "test123!",
+  "name": "닉네임"
 }
 ```
 
+**READ**
 **Response**
 
-Code **200**: 수정된 유저 정보
+`ID에 해당하는 답변을 조회합니다.`
+```graphql
+query {
+  getAnswer(id: 1) {
+    id
+    surveyResponseId
+    choiceId
+  }
+}
+200: 수정된 유저 정보
 ```
+
+`모든 답변을 조회합니다.`
+```graphql
+query {
+  getAnswers {
+    id
+    surveyResponseId
+    choiceId
+  }
 {
   "userId": 1,
   "email": "test@test.com",
@@ -142,354 +356,143 @@ Code **200**: 수정된 유저 정보
 }
 ```
 
-Code **401**: 권한 없음
+**UPDATE**
 
-Code **404**: 유저 ID가 유효하지 않음
+`답변 데이터를 변경합니다.`
+```graphql
+mutation {
+  updateAnswer(id: 1, answerInput: {
+    surveyResponseId: 2
+    choiceId: 2
+}) {
+    id
+    surveyResponseId
+    choiceId
+  }
+}
+```
+401: 권한 없음
 
+**DELETE**
+404: 유저 ID가 유효하지 않음
+
+`답변을 삭제합니다.`
+```graphql
+mutation {
+  deleteAnswer(id: 1)
+}
+```
+---
+### 작성지 CRUD
+**CREATE**
+
+`새 작성지를 생성합니다.`
+```graphql
+mutation {
+  createSurveyResponse(surveyResponseInput: {
+    surveyId: 1
+    userId: 1
+  }) {
+    id
+    surveyId
+    userId
+    completionDate
+    score
+  }
+}
+```
 <br>
 
+**READ**
+
+`ID에 해당하는 작성지를 조회합니다.`
+```graphql
+query {
+  getSurveyResponse(id: 1) {
+    id
+    surveyId
+    userId
+    completionDate
+    score
+  }
+}
+```
 **`DELETE /v1/users/`**
 
+`모든 작성지를 조회합니다.`
+```graphql
+query {
+  getSurveyResponses {
+    id
+    surveyId
+    userId
+    completionDate
+    score
+  }
+}
+```
 유저를 삭제합니다.
 
-**Response**
-
-Code **200**: 삭제 완료
-
-Code **401**: 권한 없음
-
-Code **404**: 유저 ID가 유효하지 않음
-
----
-
-### 로그인 API
-
-**`POST /v1/auths/login`**
-
-로그인 후 Access Token과 Refesh Token을 발급합니다.
-
-**Body Example**
-```
-{
-  "email": "test@test.com",
-  "password": "test123!"
-}
-```
-
-**Response**
-
-Code **201**: 토큰 반환
-```
-{
-  "access_token": "string",
-  "refresh_token": "string"
-}
-```
-
-Code **401**: 권한 없음
-
-Code **403**: 이메일 또는 비밀번호가 유효하지 않음
-
-<br>
-
-**`POST /v1/auths/refresh`**
-
-Access Token을 재발급합니다.
-
-**Response**
-
-Code **201**: Access Token 반환
-```
-{
-  "access_token": "string"
-}
-```
-
-Code **401**: Refresh Token이 유효하지 않음
-
----
-
-### 게시글 API
-
-**`GET /v1/boards`**
-
-게시글 목록을 조회합니다.
-
-**Query Example**
-```
-target?: "all" || "title" || "writer",
-keyword?: "키워드",
-category?: "공지사항",
-sort?: "view" || "view7d" || "view30d" || "view365d",
-page?: 1
-```
-
-**Response**
-
-Code **200**: 조회된 게시글 목록
-```
-[
-  {
-    "id": 1,
-    "category": "공지사항",
-    "writer": "작성자",
-    "title": "제목",
-    "regdate": "2024-01-01 00:00:00",
-    "views": 0
+`완료된 작성지를 조회합니다.`
+```graphql
+query {
+  getCompletedSurveys {
+    id
+    surveyId
+    userId
+    completionDate
+    score
   }
-]
-```
-
-Code **401**: 권한 없음
-
-<br>
-
-**`GET /v1/boards/${id}`**
-
-특정 게시글을 조회합니다.
-
-**Response**
-
-Code **200**: 조회된 게시글 정보
-```
-{
-  "boardId": 1,
-  "categoryId": 1,
-  "userId": 1,
-  "title": "제목",
-  "content": "내용",
-  "regdate": "2024-01-01 00:00:00",
-  "updatedate": "2024-01-01 00:00:00",
-  "deletedate": "2024-01-01 00:00:00",
-  "views": 0
 }
-```
-
-Code **401**: 권한 없음
-
-Code **404**: 게시글이 존재하지 않음
-
-<br>
-
-**`POST /v1/boards`**
-
-새 게시글을 작성합니다.
-
 **Body Example**
 ```
-{
-  "categoryId": 1,
-  "title": "title",
-  "content": "content"
-}
-```
 
-**Response**
+**UPDATE**
 
-Code **201**: 작성된 게시글 정보
-```
-{
-  "boardId": 1,
-  "categoryId": 1,
-  "userId": 1,
-  "title": "제목",
-  "content": "내용",
-  "regdate": "2024-01-01 00:00:00",
-  "updatedate": "2024-01-01 00:00:00",
-  "deletedate": "2024-01-01 00:00:00",
-  "views": 0
-}
-```
-
-Code **400**: 카테고리 ID가 유효하지 않음
-
-Code **401**: 권한 없음
-
-<br>
-
-**`POST /v1/boards/image`**
-
-이미지를 업로드합니다.
-
-**Body Example**
-```
-- multipart/form-data -
-file * string($binary)
-```
-
-**Response**
-
-Code **200**: 업로드된 이미지 URL
-```
-{
-  "imageUrl": "https://s3.apnortheast-2.amazonaws.com/src/image.png"
-}
-```
-
-<br>
-
-**`PATCH /v1/boards/${id}`**
-
-게시글을 수정합니다.
-
-**Body Example**
-```
-{
-  "categoryId"?: 1,
-  "title"?: "title",
-  "content"?: "content"
-}
-```
-
-**Response**
-
-Code **200**: 수정된 게시글 정보
-```
-{
-  "boardId": 1,
-  "categoryId": 1,
-  "userId": 1,
-  "title": "제목",
-  "content": "내용",
-  "regdate": "2024-01-01 00:00:00",
-  "updatedate": "2024-01-01 00:00:00",
-  "deletedate": "2024-01-01 00:00:00",
-  "views": 0
-}
-```
-
-Code **400**: 카테고리 ID가 유효하지 않음
-
-Code **401**: 권한 없음
-
-Code **404**: 게시글 ID가 유효하지 않음
-
-<br>
-
-**`DELETE /v1/boards/${id}`**
-
-게시글을 삭제합니다.
-
-**Response**
-
-Code **200**: 삭제 완료
-
-Code **401**: 권한 없음
-
-Code **404**: 게시글 ID가 유효하지 않음
-
----
-
-### 댓글 API
-
-**`GET /v1/replys/${id}`**
-
-게시글의 댓글을 조회합니다.
-
-**Response**
-
-Code **200**: 조회된 댓글 정보
-```
-[
-  {
-    "id": 1,
-    "boardId": 1,
-    "name": "작성자",
-    "parentId": 1,
-    "content": "내용",
-    "regdate": "2024-01-01 00:00:00",
-    "updatedate": "2024-01-01 00:00:00",
-    "deletedate": "2024-01-01 00:00:00"
+`작성지 데이터를 변경합니다.`
+```graphql
+mutation {
+  updateSurveyResponse(id: 1, surveyResponseInput: {
+    surveyId: 2
+    userId: 2
+}) {
+    id
+    surveyId
+    userId
+    completionDate
+    score
   }
-]
-```
-
-Code **401**: 권한 없음
-
-<br>
-
-**`POST /v1/replys`**
-
-댓글을 작성합니다.
-
-**Body Example**
-```
 {
-  "boardId": 1,
-  "parentId": 1,
-  "content": "내용"
+  "password": "test123!",
+  "name": "닉네임"
 }
 ```
 
+`작성지를 완료합니다. 테이블의 completionDate 값에 현재 시각이 입력됩니다.`
+```graphql
+mutation {
+  completeSurvey(id: 1) {
+    id
+    surveyId
+    userId
+    completionDate
+    score
+  }
+}
+```
 **Response**
 
-Code **201**: 작성된 댓글 정보
-```
-{
-  "replyId": 1,
-  "boardId": 1,
-  "userId": 1,
-  "parentId": 1,
-  "content": "내용",
-  "regdate": "2024-01-01 00:00:00",
-  "updatedate": "2024-01-01 00:00:00",
-  "deletedate": "2024-01-01 00:00:00"
+**DELETE**
+200: 삭제 완료
+
+`작성지를 삭제합니다.`
+```graphql
+mutation {
+  deleteSurveyResponse(id: 1)
 }
 ```
+401: 권한 없음
 
-Code **400**: 게시글 ID 또는 부모 댓글 ID가 유효하지 않음
-
-Code **401**: 권한 없음
-
-<br>
-
-**`PATCH /v1/replys/${id}`**
-
-댓글을 수정합니다.
-
-**Body Example**
-```
-{
-  "boardId"?: 1,
-  "parentId"?: 1,
-  "content"?: "내용"
-}
-```
-
-**Response**
-
-Code **200**: 수정된 댓글 정보
-```
-{
-  "replyId": 1,
-  "boardId": 1,
-  "userId": 1,
-  "parentId": 1,
-  "content": "내용",
-  "regdate": "2024-01-01 00:00:00",
-  "updatedate": "2024-01-01 00:00:00",
-  "deletedate": "2024-01-01 00:00:00"
-}
-```
-
-Code **400**: 게시글 ID 또는 부모 댓글 ID가 유효하지 않음
-
-Code **401**: 권한 없음
-
-Code **404**: 댓글 ID가 유효하지 않음
-
-<br>
-
-**`DELETE /v1/replys/${id}`**
-
-댓글을 삭제합니다.
-
-**Response**
-
-Code **200**: 삭제 완료
-
-Code **401**: 권한 없음
-
-Code **404**: 댓글 ID가 유효하지 않음
+404: 유저 ID가 유효하지 않음
 
 ---
